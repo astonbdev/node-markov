@@ -1,5 +1,7 @@
 /** Textual markov chain generator. */
 
+const { builtinModules } = require("module");
+
 
 class MarkovMachine {
 
@@ -15,7 +17,7 @@ class MarkovMachine {
   /** Get markov chain: returns Map of Markov chains.
    *
    *  For text of "The cat in the hat.", chains will be:
-   * 
+   *
    *  {
    *   "The": ["cat"],
    *   "cat": ["in"],
@@ -23,11 +25,22 @@ class MarkovMachine {
    *   "the": ["hat."],
    *   "hat.": [null]
    *  }
-   * 
+   *
    * */
 
   getChains() {
     // TODO: implement this!
+    let chains = {}; // {"word": [adjacentWord1, adjacentWord2, ....]}
+
+    for(let idx in phrase){
+        const word = phrase[idx];
+        let adjacentWords = chains[word] || [];
+
+        let nextWord = phrase[idx+1];
+        adjacentWords.append(nextWord);
+    }
+
+    return chains;
   }
 
 
@@ -37,8 +50,30 @@ class MarkovMachine {
   getText() {
     // TODO: implement this!
 
+
     // - start at the first word in the input text
     // - find a random word from the following-words of that
     // - repeat until reaching the terminal null
   }
+
+
 }
+
+/** standard frequency counter takes in iterable, returns key value pairs with value as counts */
+// function frequencyCounter(phrase){
+//   let adjacentMap = {}; // {"word": [adjacentWord1, adjacentWord2, ....]}
+
+//   for(let idx in phrase){
+//       const word = phrase[idx];
+//       let adjacentWords = adjacentMap[word] || [];
+
+//       let nextWord = phrase[idx+1];
+//       adjacentWords.append(nextWord);
+//   }
+
+//   return adjacentMap;
+// }\
+
+module.export = {
+  MarkovMachine: MarkovMachine
+};
