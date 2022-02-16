@@ -32,12 +32,19 @@ class MarkovMachine {
     // TODO: implement this!
     let chains = {}; // {"word": [adjacentWord1, adjacentWord2, ....]}
 
-    for(let idx in phrase){
-        const word = phrase[idx];
-        let adjacentWords = chains[word] || [];
+    for(let idx in this.words){
+        const word = this.words[idx];
 
-        let nextWord = phrase[idx+1];
-        adjacentWords.append(nextWord);
+        if(!chains[word]){
+          chains[word] = [];
+        }
+
+        let adjacentWords = chains[word];
+
+        let nextWordIdx = (parseInt(idx)+1);
+
+        let nextWord = this.words[nextWordIdx];
+        adjacentWords.push(nextWord);
     }
 
     return chains;
@@ -74,6 +81,8 @@ class MarkovMachine {
 //   return adjacentMap;
 // }\
 
-module.export = {
-  MarkovMachine: MarkovMachine
-};
+module.exports = MarkovMachine;
+
+let markov = new MarkovMachine(
+  "The cat is in the hat. The cat is the cat. The hat is a cat."
+  );
