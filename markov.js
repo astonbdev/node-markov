@@ -2,6 +2,8 @@
 
 const { builtinModules } = require("module");
 
+const MAX_LENGTH = 25;
+
 
 class MarkovMachine {
 
@@ -11,6 +13,7 @@ class MarkovMachine {
     // A "word" will also include any punctuation around the word, so this will
     // include things like "The", "cat", "cat.".
     this.words = text.split(/[ \r\n]+/);
+    console.log(this.words);
     this.chains = this.getChains();
   }
 
@@ -43,8 +46,12 @@ class MarkovMachine {
 
         let nextWordIdx = (parseInt(idx)+1);
 
-        let nextWord = this.words[nextWordIdx];
-        adjacentWords.push(nextWord);
+        if(!this.words[nextWordIdx]){
+          adjacentWords.push(null);
+        }
+        else{
+          adjacentWords.push(this.words[nextWordIdx]);
+        }
     }
 
     return chains;
@@ -56,33 +63,42 @@ class MarkovMachine {
 
   getText() {
     // TODO: implement this!
+    const firstWord = this.words[0];
+    const markovText = [];
 
+    let word = firstWord;
+
+    while(word!=null){
+
+      markovText.push(word);
+
+      let randomIdx = this.getRandomIntInclusive(0, this.chains[word].length - 1);
+
+      word = this.chains[word][randomIdx];
+
+      if(markovText.length > MAX_LENGTH){
+        word = null;
+      }
+    }
+
+    return markovText.join(" ");
+  }
+
+  /** returns random integer min and max inclusive */
+
+  getRandomIntInclusive(min, max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+  }
 
     // - start at the first word in the input text
     // - find a random word from the following-words of that
     // - repeat until reaching the terminal null
-  }
-
-
 }
-
-/** standard frequency counter takes in iterable, returns key value pairs with value as counts */
-// function frequencyCounter(phrase){
-//   let adjacentMap = {}; // {"word": [adjacentWord1, adjacentWord2, ....]}
-
-//   for(let idx in phrase){
-//       const word = phrase[idx];
-//       let adjacentWords = adjacentMap[word] || [];
-
-//       let nextWord = phrase[idx+1];
-//       adjacentWords.append(nextWord);
-//   }
-
-//   return adjacentMap;
-// }\
 
 module.exports = MarkovMachine;
 
 let markov = new MarkovMachine(
   "The cat is in the hat. The cat is the cat. The hat is a cat."
-  );
+);
